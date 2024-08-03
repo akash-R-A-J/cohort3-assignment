@@ -1,1 +1,1 @@
-
+Here you can find all the assignments related to web3.
