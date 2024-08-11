@@ -44,3 +44,23 @@ function sumUptoN(n){
 }
 
 console.log(sumUptoN(5));
+
+// assign-3 (create a function that takes an array of objects as input and returns the users whose age > 18 and are male.)
+function helper(args){
+    let ans = [];
+    for(let i in args){
+        if(args[i].age > 18 && args[i].gender === 'male'){
+            ans.push(args[i]);
+        }
+    }
+    return ans;
+}
+
+let input = [
+    {name: 'John', age: 18, gender: 'male'}, 
+    {name: 'Raj', age: 25, gender: 'male'}, 
+    {name: 'Priya', age: 56, gender: 'female'}, 
+    {name: 'Drake', age: 37, gender: 'male'}   
+]
+
+console.log(helper(input));
