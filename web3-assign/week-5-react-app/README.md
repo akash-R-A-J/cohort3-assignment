@@ -18,6 +18,9 @@ Welcome,
   3. install the related dependecies mentioned above.
   4. git run dev
 
+# Here is picture for the reference of the website
+![airdrop_react_app](https://github.com/user-attachments/assets/d6832ce7-7e10-4225-9eb9-21aaba24af0b)
+
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
