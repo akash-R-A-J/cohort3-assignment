@@ -21,11 +21,12 @@ Welcome,
 # Here is picture for the reference of the website
 ![airdrop_react_app](https://github.com/user-attachments/assets/d6832ce7-7e10-4225-9eb9-21aaba24af0b)
 
-Note: 
+# Note
   1. Make sure you have a wallet (like Phantom, Backpack or other)
      1. Phantom- https://phantom.app/
      2. Backpack- https://backpack.app/
   2. Update your settings in the wallet from Mainnet to Devnet (because you can't airdrop yourself on mainnet unless you have your own token)
+
      [Steps to do so: Settings -> Developer Settings -> Turn on `Testnet Mode`]
 
 # React + Vite
