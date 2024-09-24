@@ -1,6 +1,6 @@
 Welcome,
 
-# Using this application,
+# Using this application
   1. You can automatically connect with your wallet, if present.
   2. You can airdrop some sol into your account.
   3. You can also see your balance.
@@ -13,9 +13,10 @@ Welcome,
   5. @solana/wallet-adapter-wallets
 
 # Clone and run this application
-  1. git clone repo_url
-  2. install the related dependecies mentioned above.
-  3. git run dev
+  1. git clone https://github.com/akash-R-A-J/cohort3-assignment.git
+  2. Navigate to the week-5-react-app directory
+  3. install the related dependecies mentioned above.
+  4. git run dev
 
 # React + Vite
 
