@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://akash-R-A-J.github.io/cohort3-assignment/week-5-react-app",
+  "homepage": "https://akash-R-A-J.github.io/cohort3-assignment/web3-assign/week-5-react-app",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
