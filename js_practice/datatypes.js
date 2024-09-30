@@ -87,9 +87,9 @@ console.log(nums.shift()); // remove first elm
 console.log(nums.indexOf(3)); // return index of 1st occurrance
 console.log(nums.lastIndexOf(2)); // return index of last occurrance
 console.log(nums.includes(5)); // return true if nums contain 5
-// console.log(nums.find()); ???
+// console.log(nums.find()); //??
 
-// classes
+// classes (how? where is stores _x and _y)
 class Pair{
     constructor(x, y) {
         this.x = x;
