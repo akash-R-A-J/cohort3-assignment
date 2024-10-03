@@ -1,0 +1,76 @@
+<html>
+  <head>
+    <title>Practice</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: black;
+        margin: 10px auto;
+        width: 1200px;
+        color: white;
+      }
+
+      .container {
+        height: 400px;
+        display: flex;
+      }
+
+      .left {
+        background-color: red;
+        flex-grow: 1;
+      }
+
+      .right {
+        background-color: blue;
+        flex-grow: 2;
+        display: flex;
+        margin: 0 auto;
+      }
+
+      .child {
+        
+        width: 33%;
+        display: flex;
+        flex-direction:column;
+        justify-content: center;
+        
+      }
+
+      .c1 {
+        background-color: gray;
+      }
+
+      .c2 {
+        background-color: green;
+      }
+
+      .c3 {
+        background-color: plum;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="left">Left</div>
+      <div class="right">
+        Right
+        <div class="child c1">
+          <div>r-1</div>
+          <div>r-2</div>
+          <div>r-3</div>
+        </div>
+        <div class="child c2">
+          <div>r-1</div>
+          <div>r-2</div>
+          <div>r-3</div>
+        </div>
+        <div class="child c3">
+          <div>r-1</div>
+          <div>r-2</div>
+          <div>r-3</div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
