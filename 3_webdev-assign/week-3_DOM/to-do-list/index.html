@@ -3,76 +3,29 @@
   <head>
     <meta charset="utf-8" />
     <title>To-Do List</title>
-    <style>
-      body {
-        display: flex;
-        justify-content: center;
-        color: white;
-        background-color: blue;
-      }
-
-      h1 {
-        text-align: center;
-      }
-
-      .container {
-        background-color: rgba(14, 87, 87, 0.585);
-        padding: 30px;
-        margin-top: 50px;
-        min-width: 500px;
-        border-radius: 10px;
-      }
-
-      .add_todo {
-        display: flex;
-        justify-content: center;
-      }
-
-      button {
-        color: white;
-        background-color: black;
-        text-decoration: none;
-        border: none;
-        padding: 5px;
-        margin-left: 5px;
-      }
-    </style>
+    <link rel="stylesheet" href="style.css" />
   </head>
+
   <body>
     <div class="container">
       <h1>To Do List</h1>
       <hr />
-      <div id="todos">
-        <h4>1. Take Class</h4>
-        <h4>2. Lunch</h4>
-        <h4>3. Go to Gym</h4>
-      </div>
+      <div id="todos"></div>
       <br /><br />
       <div class="add_todo">
         <input type="text" value="" />
         <button onclick="get_todo()">Add Todo</button>
       </div>
+
+      <!-- Custom alert and overlay -->
+      <div id="overlay"></div>
+      <div id="custom-alert">
+        <p id="alert-message"></p>
+        <button class="close-btn" onclick="closeAlert()">Close</button>
+      </div>
+      
     </div>
 
-    <script>
-      function get_todo() { // used to get the text from input field
-        const input = document.querySelector("input"); // input variable is referenced to input field
-        let value = input.value;
-        createStr(value);
-      }
-
-      function createStr(input) { // used to create the string of the to-do, using count and value
-        const arr = document.querySelectorAll("h4");
-        const count = +arr[arr.length - 1].innerHTML.split(".")[0] + 1; // before arr, + is used to convert str to num
-        addElm(count + ". " + input);
-      }
-
-      function addElm(value) { // used to add the given to-do in the list
-        let h4 = document.createElement("h4");
-        h4.innerHTML = value; // or h4.appendChild(value)
-        document.getElementById("todos").appendChild(h4);
-      }
-
-    </script>
+    <script src="script.js"></script>
   </body>
 </html>
