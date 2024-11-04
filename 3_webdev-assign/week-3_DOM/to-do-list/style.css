@@ -22,6 +22,15 @@ h1 {
   justify-content: center;
 }
 
+.todos{
+  display: flex;
+  justify-content: space-between;
+}
+
+.todos-btn{
+  
+}
+
 input[type="text"] {
   color: white;
   background-color: black;
