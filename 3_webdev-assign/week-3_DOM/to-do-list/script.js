@@ -1,4 +1,3 @@
-// let ctr = 1;
 function get_todo() {
   // used to get the text from input field
   const input = document.querySelector("input"); // input variable is referenced to input field
@@ -16,7 +15,8 @@ function createStr(input) {
   if (arr.length == 0) str = "1. " + input;
   else {
     // before arr, + is used to convert str to num
-    count = +arr[arr.length - 1].children[0].innerHTML.split(".")[0] + 1;
+    count = arr.length + 1;
+    // count = +arr[arr.length - 1].children[0].innerHTML.split(".")[0] + 1;
     str = count + ". " + input;
   }
 
@@ -47,11 +47,12 @@ function addElm(value, count) {
   document.getElementById("todos").appendChild(todos);
 }
 
-// ERROR: among 3 todos, after deleting the 2nd todo, not able to delete the last todo afterwards
+// ERROR (resolved): among 3 todos, after deleting the 2nd todo, not able to delete the last todo afterwards
 function deleteTodo(id) {
   const toDelete = document.getElementById(id);
   if (toDelete) {
-    toDelete.remove(); // Remove the div from the DOM
+    toDelete.remove(); // Remove the div elm from the DOM
+    // or toDelete.parentNode.removeChild(toDelete);
   }
 
   updateTodo();

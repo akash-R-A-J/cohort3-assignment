@@ -31,7 +31,7 @@ h1 {
   margin: 2px;
 }
 
-input[type="text"] {
+input[type="text"], #updateInput {
   color: white;
   background-color: black;
   border: none;
@@ -44,6 +44,10 @@ button {
   border: none;
   padding: 5px;
   margin-left: 5px;
+}
+
+#updateBtn{
+  padding: 5px 10px;
 }
 
 /* Styles for the custom alert box */
