@@ -4,3 +4,4 @@ projects_to_build
 solana-cli
 solana
 docs
+node_modules
