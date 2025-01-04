@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>To-Do List</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <!-- https://tailwindcss.com/docs/guides/vite -->
+
+  <body>
+    <div class="container">
+      <h1>To Do List</h1>
+      <hr />
+      <div id="todos"></div>
+      <!--created to-dos will be added here -->
+      <br /><br />
+      <div class="add_todo">
+        <input type="text" value="" />
+        <button onclick="addTodo()">Add Todo</button>
+      </div>
+
+      <!-- Custom alert and overlay -->
+      <div id="overlay"></div>
+      <div id="custom-alert">
+        <p id="alert-message"></p>
+        <button class="close-btn" onclick="closeAlert()">Close</button>
+      </div>
+    </div>
+
+    <script src="render.js"></script>
+  </body>
+</html>
