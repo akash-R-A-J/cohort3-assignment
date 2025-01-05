@@ -2,20 +2,18 @@ const fs = require("fs");
 let filepath = "";
 
 /*
+    (NOTE: path is set to filepath by default but you have to give your filepath at least once.)
+    
     FUNCTIONS:
     
-    1.  setPath(filepath)
+    1.  setPath()
     2.  getPath()
-    3.  getDataString()
-    4.  getDataString(filepath)
-    5.  getDataObject()
-    6.  getDataObject(filepath)
-    7.  writeData(object)
-    8.  appendData(object)
-    9.  appendData(filepath, object)
-    10. setField(index, field, value)
+    3.  readFileAsString()
+    4.  readFileAsObject()
+    5.  writeData()
+    6.  appendData()
+    7.  updateField()
     
-    NOTE: path is set to filepath by default but you have to give your filepath at least once.
 */
 
 // set path of the file
