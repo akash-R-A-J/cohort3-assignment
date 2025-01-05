@@ -1,0 +1,19 @@
+[
+  {
+    "id": 1,
+    "username": "John",
+    "courses": [
+      {
+        "c1": "Math"
+      },
+      {
+        "c2": "Physics"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "username": "Akash",
+    "college": "KIIT"
+  }
+]
