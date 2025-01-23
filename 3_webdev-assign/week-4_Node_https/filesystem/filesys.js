@@ -1,7 +1,7 @@
 const fs = require("fs");
 const library = require("./library");
 const path = "storage.json";
-const file = require("./storage.json");
+// const file = require("./storage.json");
 
 let users = [];
 library.setPath(path);
@@ -50,7 +50,7 @@ function fileData() {
   console.log(library.readFileAsObject());
 }
 
-console.log(JSON.stringify(file[1].username));
+// console.log(JSON.stringify(file[1].username));
 addUser(2, "Akash", "KIIT");
 updateFile();
 fileData();

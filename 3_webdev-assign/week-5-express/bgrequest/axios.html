@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Using Axios</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.6/axios.min.js"></script>
+  </head>
+  <body>
+    <h1>LinkedIn</h1>
+    <button onclick="fetchPosts()">Fetch Latest Posts</button>
+    <div id="posts"></div>
+    <script>
+      async function fetchPosts() {
+        const res = await axios.get(
+          "https://jsonplaceholder.typicode.com/posts"
+        );
+
+        let arr = res.data;
+        for (let i = 0; i < arr.length; i++) {
+          // for appending data in an element
+          document.getElementById("posts").innerHTML +=
+            "<div>" + arr[i].title + "</div>";
+        }
+      }
+    </script>
+  </body>
+</html>

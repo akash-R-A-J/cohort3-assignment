@@ -1,17 +1,18 @@
 {
-  "name": "filesystem",
+  "name": "cors-basic",
   "version": "1.0.0",
   "description": "",
-  "main": "filesys.js",
+  "main": "index.js",
   "scripts": {
+    "start": "index.html",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "commander": "^13.0.0",
-    "filesystem": "file:",
-    "lodash": "^4.17.21"
+    "cors": "^2.8.5",
+    "cors-basic": "file:",
+    "express": "^4.21.2"
   }
 }

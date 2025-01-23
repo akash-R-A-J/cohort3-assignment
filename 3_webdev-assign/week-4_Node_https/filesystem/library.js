@@ -13,6 +13,7 @@ let filepath = "";
     5.  writeData()
     6.  appendData()
     7.  updateField()
+    8.  isPresent()
     
 */
 
@@ -35,7 +36,11 @@ function readFileAsString(path = filepath) {
 
 // return data as object
 function readFileAsObject(path = filepath) {
-  return JSON.parse(readFileAsString(path));
+  let data = readFileAsString(path).trim();
+  if (data) {
+    return JSON.parse(readFileAsString(path));
+  }
+  return [];
 }
 
 // write this object in the file
@@ -62,6 +67,30 @@ function updateField(index, field, value, path = filepath) {
   }
 }
 
+// will check if an object is already present or not? by matching the description
+// return the index of the object, return -1 if not found
+function isPresentAsObject(todo) {
+  const data = readFileAsObject();
+  for (let i = 0; i < data.length; i++) {
+    if (data[i].description.toLowerCase() === todo.description.toLowerCase()) {
+      return i; // Return the index if a match is found
+    }
+  }
+
+  return -1; // Return -1 if no match is found
+}
+
+function isPresentAsString(todo) {
+  const data = readFileAsObject();
+  for (let i = 0; i < data.length; i++) {
+    if (data[i].description.toLowerCase() === todo.toLowerCase()) {
+      return i; // Return the index if a match is found
+    }
+  }
+
+  return -1; // Return -1 if no match is found
+}
+
 module.exports = {
   setPath,
   getPath,
@@ -70,4 +99,6 @@ module.exports = {
   writeData,
   appendData,
   updateField,
+  isPresentAsObject,
+  isPresentAsString,
 };
