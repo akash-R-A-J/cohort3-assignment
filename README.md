@@ -1,5 +1,5 @@
 # cohort3-assignment
-It contains all assignments of cohort-3.
+It contains all assignments and projects of cohort-3.
 
 1. Code - https://github.com/code100x
 2. Slides - https://projects.100xdevs.com/
