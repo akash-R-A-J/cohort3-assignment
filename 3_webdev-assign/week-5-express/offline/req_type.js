@@ -38,3 +38,4 @@ async function syntax3() {
 }
 
 syntax3();
+
