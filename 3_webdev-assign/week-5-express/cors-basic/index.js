@@ -4,7 +4,7 @@ const cors = require("cors");
 const app = express();
 
 // here all domains can send the request
-app.use(cors(), express.json());
+app.use(cors(), express.json()); // used 2 middlewares
 
 // if you want cors to restrict to certain domains then use this:
 // app.use(cors({

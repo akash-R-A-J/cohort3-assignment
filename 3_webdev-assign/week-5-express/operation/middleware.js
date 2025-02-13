@@ -2,7 +2,7 @@ const express = require("express");
 
 const app = express();
 
-// checks if the input is valid or notF
+// checks if the input is valid or not
 function checkValidInput(req, res, next) {
   if (req.path === "/favicon.ico") {
     return next();

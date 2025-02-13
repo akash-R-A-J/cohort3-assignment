@@ -4,7 +4,7 @@ const cors = require("cors");
 const app = express();
 
 app.use(express.json());
-app.use(cors());
+app.use(cors()); // allow all origins for sending request
 
 app.get("/sum", (req, res) => {
   const a = parseInt(req.query.a);

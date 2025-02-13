@@ -17,12 +17,13 @@
     <div id="response" style="margin:20px;">Result will be added here:</div>
     
     <script>
+        const url = "http://localhost:3000/sum";
         async function sendRequest(){
             
             const a = document.getElementById("a").value;
             const b = document.getElementById("b").value;
             
-            const response = await axios.post("http://localhost:3000/sum", {
+            const response = await axios.post(url, {
                 a: a,
                 b: b
             })

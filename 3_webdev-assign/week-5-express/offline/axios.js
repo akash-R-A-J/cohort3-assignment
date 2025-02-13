@@ -16,13 +16,13 @@ main1();
 // slightly complex syntax
 function main2() {
   // fetch doesn't knows which type of data it will get in return,
-  // and that is why we need to convert then response into
+  // and that is why we need to convert the response into
   // json or text as per the data received
   // for json use: response.json();
   // for text use: response.text();
   fetch("http://localhost:3000/random").then((response) => {
-    response.json().then((json) => {
-      console.log(json);
+    response.json().then((jsonData) => {
+      console.log(jsonData);
     });
   });
 }
@@ -33,7 +33,7 @@ main2();
 
 async function main3() {
   // only one line of code needed here as compare to using fetch
-  // axios knows which type of data will it get in return
+  // axios knows which type of data it will get in return
   const response = await axios.get("http://localhost:3000/random");
   console.log(response.data);
 }

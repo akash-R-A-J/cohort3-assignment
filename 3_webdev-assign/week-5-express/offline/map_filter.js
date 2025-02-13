@@ -21,8 +21,7 @@ console.log(ans2);
 // Que: multiply each elm of the given arr by 2
 
 const input = [1, 2, 3, 4, 5]; // input1
-function helper1(a) {
-  // input2
+function helper1(a) { // input2
   return a * 2;
 }
 
