@@ -51,18 +51,21 @@ app.post("/signin", (req, res) => {
     .json({ msg: "Signin successful!" });
 });
 
-app.post("/add-todo", (req, res) => {
-  const token = req.headers.authorization.split(" ")[1]; // Get token from headers
-  console.log(token);
+function auth(req, res, next) {
+  const token = req.headers.authorization.split(" ")[1];
 
   if (!token) {
     return res.status(401).json({ msg: "Authorization token required." });
   }
 
+  const decoded = JWT.verify(token, JWT_SECRET);
+  req.body.username = decoded.username;
+  next();
+}
+
+app.post("/add-todo", auth, (req, res) => {
   try {
-    const decoded = JWT.verify(token, JWT_SECRET);
-    console.log(decoded);
-    const username = decoded.username;
+    const username = req.body.username;
     const todo = req.body.todo;
 
     if (!todo) {
