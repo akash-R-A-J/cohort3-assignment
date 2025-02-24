@@ -1,0 +1,19 @@
+[
+  {
+    "username": "raj",
+    "password": "1234",
+    "todos": [
+      
+      {
+        "id": 1740430858078,
+        "todo": "add this todo",
+        "completed": false
+      },
+      {
+        "id": 1740430914863,
+        "todo": "go to gym",
+        "completed": false
+      }
+    ]
+  }
+]

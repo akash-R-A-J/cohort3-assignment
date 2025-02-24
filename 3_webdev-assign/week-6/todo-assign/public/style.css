@@ -1,0 +1,23 @@
+body {
+  text-align: center;
+  margin-top: 100px;
+  /* background-color: black; */
+}
+
+#auth-container {
+  display: block;
+  margin: 0 auto;
+  background-color: aqua;
+  width: 600px;
+  height: 200px;
+  padding: 20px;
+  border-radius: 25px;
+}
+
+#signup {
+  margin: 10px;
+}
+
+#todos {
+  margin: 10px;
+}

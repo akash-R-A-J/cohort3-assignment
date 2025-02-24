@@ -1,0 +1,56 @@
+<html>
+  <head>
+    <title>Todo-website</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.7/axios.min.js"></script>
+  </head>
+
+  <body>
+    <div id="auth-container">
+      <div id="signup">
+        Signup
+        <input
+          type="text"
+          name=""
+          id="signup-username"
+          placeholder="Username"
+        />
+        <input
+          type="password"
+          name=""
+          id="signup-password"
+          placeholder="password"
+        />
+        <button id="signup-btn" onclick="signup()">Signup</button>
+      </div>
+
+      <div id="signin">
+        Signin
+        <input
+          type="text"
+          name=""
+          id="signin-username"
+          placeholder="Username"
+        />
+        <input
+          type="password"
+          name=""
+          id="signin-password"
+          placeholder="password"
+        />
+        <button id="signin-btn" onclick="signin()">Signin</button>
+      </div>
+    </div>
+
+    <div id="dashboard">
+      <div>
+        <input type="text" name="" id="todo" placeholder="go to gym...." />
+        <button id="todo-btn" onclick="addTodo()">Add Todo</button>
+        <div id="todos"></div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="todo.js"></script>
+  </body>
+</html>
