@@ -52,14 +52,14 @@ app.post("/signin", (req, res) => {
 });
 
 function auth(req, res, next) {
-  const token = req.headers.authorization.split(" ")[1];
-
-  if (!token) {
-    return res.status(401).json({ msg: "Authorization token required." });
+  try {
+    const token = req.headers.authorization.split(" ")[1];
+    const decoded = JWT.verify(token, JWT_SECRET);
+    req.body.username = decoded.username;
+  } catch (error) {
+    return res.status(401).json({ msg: "Unauthorized: Invalid token." });
   }
 
-  const decoded = JWT.verify(token, JWT_SECRET);
-  req.body.username = decoded.username;
   next();
 }
 
@@ -67,17 +67,8 @@ app.post("/add-todo", auth, (req, res) => {
   try {
     const username = req.body.username;
     const todo = req.body.todo;
-
-    if (!todo) {
-      return res.status(400).json({ msg: "Todo cannot be empty." });
-    }
-
-    console.log(username);
-
     const users = file.getUsersObject();
     const user = users.find((u) => u.username === username);
-
-    console.log(user);
 
     if (!user) {
       return res.status(404).json({ msg: "User not found." });
@@ -92,18 +83,14 @@ app.post("/add-todo", auth, (req, res) => {
       completed: false,
     });
 
-    console.log(user.todos);
-
     file.writeUsersObject(users);
-
-    console.log("added todo");
 
     res.status(200).json({
       todos: user.todos,
       msg: "Todo added successfully!",
     });
   } catch (error) {
-    return res.status(401).json({ msg: "Unauthorized: Invalid token." });
+    return res.status(401).json({ msg: "Error in adding todos." });
   }
 });
 
