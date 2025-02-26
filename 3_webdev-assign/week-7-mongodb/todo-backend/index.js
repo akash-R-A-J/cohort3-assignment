@@ -1,17 +1,17 @@
+require("dotenv").config();
+
 const express = require("express");
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const JWT = require("jsonwebtoken");
 const { z } = require("zod");
 const { UserModel, TodoModel } = require("./db");
-const JWT_SECRET = "iuenuygewwbiwaudhi7ur";
-const SALT_ROUND = 10;
+const JWT_SECRET = process.env.JWT_SECRET;
+const SALT_ROUND = process.env.SALT_ROUND;
+const DB_URL = process.env.DB_URL;
 
-// database credentials = cluster credentials + database name
 // connect is an async functionn
-mongoose.connect(
-  "mongodb+srv://rajakash3852:ROx9kJAmHYYOJGTa@cluster0.2wkzs.mongodb.net/todo-app-database"
-);
+mongoose.connect(DB_URL);
 const app = express();
 app.use(express.json());
 
