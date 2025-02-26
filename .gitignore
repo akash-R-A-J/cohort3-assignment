@@ -5,3 +5,4 @@ solana-cli
 solana
 docs
 node_modules
+.env

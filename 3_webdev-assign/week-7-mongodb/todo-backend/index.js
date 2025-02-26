@@ -146,4 +146,9 @@ app.get("/todos", auth, async (req, res) => {
   }
 });
 
+// assignments of week-7
+// 1. add more endpoints
+// 2. check password if it contains special char, at least on Uppercase, lowercase etc.
+// 3. add time-stamps when todos are created
+
 app.listen(3000);
