@@ -51,6 +51,7 @@ app.post("/signin", (req, res) => {
     .json({ msg: "Signin successful!" });
 });
 
+// verifies JWT
 function auth(req, res, next) {
   try {
     const token = req.headers.authorization.split(" ")[1];
