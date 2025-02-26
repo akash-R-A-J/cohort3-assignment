@@ -1,9 +1,11 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 const JWT = require("jsonwebtoken");
+const { z } = require("zod");
 const { UserModel, TodoModel } = require("./db");
 const JWT_SECRET = "iuenuygewwbiwaudhi7ur";
-const ObjectId = mongoose.ObjectId;
+const SALT_ROUND = 10;
 
 // database credentials = cluster credentials + database name
 // connect is an async functionn
@@ -25,32 +27,50 @@ function auth(req, res, next) {
   }
 }
 
-app.post("/signup", async (req, res) => {
+// middleware for input validation
+function inputValidation(req, res, next) {
+  // creating a zod object / schema
+  const requiredBody = z.object({
+    email: z.string().min(5).max(30).email(),
+    name: z.string().min(3).max(50),
+    password: z.string().min(6).max(15),
+  });
+
+  //  only returns data or throw an error if not parsed
+  // const parsedData = requiredBody.parse(req.body);
+
+  //  returns an object with different fields (e.g.: success, error, data etc..);
+  const parsedDataWithSuccess = requiredBody.safeParse(req.body);
+
+  if (!parsedDataWithSuccess.success) {
+    res
+      .status(403)
+      .json({ msg: "Incorrect format", error: parsedDataWithSuccess.error });
+    return;
+  }
+
+  next();
+}
+
+app.post("/signup", inputValidation, async (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
   const name = req.body.name;
 
-  const user = await UserModel.findOne({
-    email: email,
-  });
-
-  //   if user already exist
-  if (user) {
-    return res
-      .status(400)
-      .json({ msg: "You are already singed up, try logging in." });
-  }
-
-  // this is an asynchronous function, so we have to await this
   try {
+    // this is an asynchronous function, so we have to await this
+    const hashedPassword = await bcrypt.hash(password, SALT_ROUND);
+
     await UserModel.create({
       email: email,
-      password: password,
+      password: hashedPassword,
       name: name,
     });
   } catch (e) {
     console.log("error", e);
-    return res.status(400).json({ mag: "error inserting data.", error: e });
+    return res
+      .status(400)
+      .json({ msg: "You have already signed-up, try signin-in.", error: e });
   }
 
   console.log("You are signed up!");
@@ -64,12 +84,16 @@ app.post("/signin", async (req, res) => {
   //   we have to awiat all database calls
   const user = await UserModel.findOne({
     email: email,
-    password: password,
   });
 
+  if (!user) {
+    return res.status(403).json({ msg: "User not found, try signing-up!" });
+  }
+
+  const userMatch = bcrypt.compare(password, user.password);
   console.log(user); // for debugging
 
-  if (user) {
+  if (userMatch) {
     // token is signed using userid (unique identifier for users) : user._id
     const token = JWT.sign({ id: user._id }, JWT_SECRET);
     return res
