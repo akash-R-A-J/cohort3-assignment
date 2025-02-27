@@ -1,6 +1,6 @@
 // for routing [all course-endpoints]
 
-const { Router } = require(express);
+const { Router } = require("express");
 const courseRouter = Router();
 
 // purchase this course
