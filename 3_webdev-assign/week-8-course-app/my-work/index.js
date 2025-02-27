@@ -1,3 +1,4 @@
+// without watching
 require("dotenv").config();
 
 const express = require("express");
@@ -34,7 +35,9 @@ app.use(express.json());
     # to add (for admins)
     /course-users -> all user who have this course
     /get-all-users-details
-    /see-all-courses
+    
+    # for both students and admins
+    /see-all-courses-available
 
 */
 
@@ -162,12 +165,12 @@ app.post("/purchase", auth, async (req, res) => {
 
   try {
     const user = UserModel.findById(userId);
-    
-    if(user.role === admin){
-        res.status(403).json({msg: "You already have access to all courses."});
-        return;
+
+    if (user.role === admin) {
+      res.status(403).json({ msg: "You already have access to all courses." });
+      return;
     }
-    
+
     const course = await CourseModel.findOne({
       name: name,
       price: parseInt(price),

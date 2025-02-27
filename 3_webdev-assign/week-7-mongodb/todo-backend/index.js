@@ -19,7 +19,7 @@ function auth(req, res, next) {
   try {
     const token = req.headers.token;
     const userId = JWT.verify(token, JWT_SECRET).userId;
-    req.userId = new mongoose.Types.ObjectId(userId);
+    req.userId = userId;
     next();
   } catch (e) {
     // if err, block the request
