@@ -38,15 +38,23 @@ const purchaseSchema = new Schema({
 // add schema for course-content
 // contents details
 // and courseId (of which this content is)
+const contentSchema = new Schema({
+  title: String,
+  contentUrl: String,
+  dexcription: String,
+  courseId: ObjectId,
+});
 
 const UserModel = mongoose.model("user", userSchema);
 const AdminModel = mongoose.model("admin", adminSchema);
 const CourseModel = mongoose.model("course", courseSchema);
 const PurchaseModel = mongoose.model("purchase", purchaseSchema);
+const ContentModel = mongoose.model("content", contentSchema);
 
 module.exports = {
   UserModel,
   AdminModel,
   CourseModel,
   PurchaseModel,
+  ContentModel,
 };

@@ -7,8 +7,8 @@ const { adminAuth } = require("../middleware/admin");
 const {
   validateSignupInput,
   validateSigninInput,
-} = require("../middleware/user");
-const { courseRouter } = require("./course");
+  addCourseInputValidation,
+} = require("../middleware/inputValidators");
 
 const adminRouter = Router();
 
@@ -69,74 +69,94 @@ adminRouter.post("/signin", validateSigninInput, async (req, res) => {
 });
 
 // create a course
-adminRouter.post("/course", adminAuth, async (req, res) => {
-  const adminId = req.adminId;
-  // add input validation here----->
-  // add try-catch block---->
-  const { title, description, price, imageUrl } = req.body;
+adminRouter.post(
+  "/add-course",
+  addCourseInputValidation,
+  adminAuth,
+  async (req, res) => {
+    const adminId = req.adminId;
+    // add try-catch block---->
+    const { title, description, price, imageUrl } = req.body;
 
-  // creating a web3 saas in 6 hr for image pipeline (instead of using image url)
-  const course = await CourseModel.create({
-    title,
-    description,
-    price,
-    imageUrl,
-    createorId: adminId,
-  });
-
-  // add checks here (like if no course fuond)
-  res.json({
-    msg: "course created",
-    id: course._id,
-  });
-});
-
-// change course
-adminRouter.put("/course", adminAuth, async (req, res) => {
-  const adminId = req.adminId;
-  // add input validation----->
-  const { title, description, price, imageUrl, courseId } = req.body;
-
-  // add try-catch block here---->
-  const course = await CourseModel.updateOne(
-    {
-      _id: courseId,
-      creatorId: adminId,
-    },
-    {
+    // creating a web3 saas in 6 hr for image pipeline (instead of using image url)
+    const course = await CourseModel.create({
       title,
       description,
       price,
       imageUrl,
+      creatorId: adminId,
+    });
+
+    // add checks here (like if no course fuond)
+    res.json({
+      msg: "course created",
+      id: course._id,
+      adminId,
+    });
+  }
+);
+
+// change/update course
+adminRouter.put(
+  "/update-course",
+  addCourseInputValidation,
+  adminAuth,
+  async (req, res) => {
+    const adminId = req.adminId;
+    const { title, description, price, imageUrl, courseId } = req.body;
+
+    try {
+      // only creator of the course can update that course
+      const updatedCourse = await CourseModel.findOneAndUpdate(
+        { _id: courseId, creatorId: adminId },
+        { $set: { title, description, price, imageUrl } },
+        { new: true } // Returns the updated document
+      );
+
+      if (!updatedCourse) {
+        return res
+          .status(404)
+          .json({ msg: "Course not found or not updated." });
+      }
+
+      res.json({
+        msg: `Updated course ${updatedCourse._id}`,
+        updatedCourse,
+        courseId,
+        adminId,
+      });
+    } catch (e) {
+      res.status(403).json({ msg: "Course not found.", error: e });
     }
-  );
+  }
+);
 
-  // add checks here (like if no course fuond)
-  res.json({
-    msg: `updated course ${course._id}`,
-  });
-});
-
-// get all courses available
+// get all his courses
 adminRouter.get("/course/bulk", adminAuth, async (req, res) => {
   const adminId = req.adminId;
 
-  // add try-catch block here---->
-  const courses = await CourseModel.find({
-    creatorId: adminId,
-  });
+  try {
+    const courses = await CourseModel.find({
+      creatorId: adminId,
+    });
 
-  // add checks here (like if no course fuond)
-  res.json({
-    msg: `Your courses :`,
-    courses: courses,
-  });
+    if (courses.length === 0) {
+      return res.json({
+        msg: `You haven't created a course yet.`,
+      });
+    }
+
+    res.json({
+      msg: `Your courses :`,
+      courses: courses,
+    });
+  } catch (e) {
+    res.status(500).json({ msg: "Cannot query database", error: e });
+  }
 });
 
 module.exports = {
   adminRouter,
 };
 
-// improve the last 3 endpoints
-// 1. /course (post, put),
-// 2. /course/bulk (get)
+// tested all endpoints: all endpoints working as expected

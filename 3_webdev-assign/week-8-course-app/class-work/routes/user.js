@@ -2,9 +2,13 @@
 const bcrypt = require("bcrypt");
 const JWT = require("jsonwebtoken");
 const { Router } = require("express"); //or use the below two lines
-const { UserModel } = require("../db");
-const {SALT_ROUND, USER_JWT_SECRET} = require("../config");
-const {validateSignupInput, validateSigninInput} = require("../middleware/user")
+const { UserModel, PurchaseModel, CourseModel } = require("../db");
+const { SALT_ROUND, USER_JWT_SECRET } = require("../config");
+const { userAuth } = require("../middleware/user");
+const {
+  validateSignupInput,
+  validateSigninInput,
+} = require("../middleware/inputValidators");
 
 const userRouter = Router();
 
@@ -68,14 +72,45 @@ userRouter.post("/signin", validateSigninInput, async (req, res) => {
 });
 
 // get all my courses
-userRouter.get("/purchases", (req, res) => {
-  res.json({
-    msg: "/user/purchases endpoint",
-  });
+userRouter.get("/my-purchases", userAuth, async (req, res) => {
+  const userId = req.userId;
+
+  try {
+    const purchases = await PurchaseModel.find({
+      userId,
+    });
+
+    const courses = await CourseModel.find({
+      _id: {$in: purchases.map(x => x.courseId)}
+    });
+    
+    // or
+    // const courses = [];
+    // for (let purchase of purchases) {
+    //   try {
+    //     const course = await CourseModel.findById({
+    //       _id: purchase.courseId,
+    //     });
+
+    //     courses.push(course);
+    //   } catch (e) {
+    //     res.status(403).json({
+    //       msg: `course not found for id: ${purchase.courseId}`,
+    //       error: e,
+    //     });
+    //   }
+    // }
+
+    res.json({
+      msg: `here are your courses`,
+      courses,
+      purchases
+    });
+  } catch (e) {
+    res.status(403).json({ msg: "Try purchasing one!", error: e });
+  }
 });
 
 module.exports = {
   userRouter,
-  validateSignupInput,
-  validateSigninInput,
 };
