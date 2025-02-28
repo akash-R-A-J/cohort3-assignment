@@ -8,9 +8,8 @@ const courseRouter = Router();
 // purchase this course
 courseRouter.post("/purchase", userAuth, async (req, res) => {
   const userId = req.userId;
-  // const title = req.body.title; used for given title
   const courseId = req.body.courseId;
-  
+
   try {
     const course = await CourseModel.findOne({
       _id: courseId,
@@ -34,6 +33,38 @@ courseRouter.post("/purchase", userAuth, async (req, res) => {
       .status(403)
       .json({ msg: "Please select the correct course.", error: e });
   }
+
+  // or we can use this logic in this function (slightly complex hehe)
+  // CourseModel.findOne({
+  //   _id: courseId,
+  // })
+  //   .then(function (course) {
+  //     if (course) {
+  //       PurchaseModel.create({
+  //         courseId,
+  //         userId,
+  //       });
+  //     } else {
+  //       return res.status(200).json({
+  //         msg: "No course found",
+  //       });
+  //     }
+  //   })
+  //   .then(function (purchase) {
+  //     if (purchase) {
+  //       res.status(200).json({
+  //         msg: "Congratulations for purchasing this course",
+  //         purchaseId: purchase._id,
+  //       });
+  //     } else {
+  //       res.status(403).json({
+  //         msg: "Purchase a course",
+  //       });
+  //     }
+  //   })
+  //    .catch(e){
+  //      res.json({error: e});
+  //    }
 });
 
 // get all courses available

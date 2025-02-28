@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { userRouter } = require("./routes/user");
 const Schema = mongoose.Schema;
 const ObjectId = mongoose.Types.ObjectId;
 
@@ -10,6 +11,23 @@ const userSchema = new Schema({
   firstName: String,
   lastName: String,
 });
+
+// or define 'userSchema' like this with 'reference' to course
+// using this we don't need another 'purchaseSchema'
+/*
+    const userSchema2 = new Schema({
+      email: { type: String, unique: true },
+      password: String,
+      firstName: String,
+      lastName: String,
+      purchasedCourses: [
+        {
+          type: ObjectId,
+          ref: "course", // reference to course collection
+        },
+      ],
+    });
+*/
 
 const adminSchema = new Schema({
   email: { type: String, unique: true },
@@ -58,3 +76,46 @@ module.exports = {
   PurchaseModel,
   ContentModel,
 };
+
+/* FOR REFERENCE IN MONGODB */
+
+// for the userSchema2 we can use this to add data in the database/collection related to this schema
+// the below function will push the courseId in the purchasedCourses array/field of the user with this username
+/*
+      async function update(username, courseId) {
+        const UserModel2 = mongoose.model("user2", userSchema2);
+        await UserModel2.updateOne(
+          {
+            username,
+          },
+          {
+            "$push": {
+              purchasedCourses : courseId,
+            },
+          }
+        );
+      }
+*/
+
+// this function will return all the purchases of the user
+/*
+      userRouter.get("/purchases", async (req, res) => {
+        // use middlewares and try-catch ---->
+        
+        const user = await UserModel.findOne({
+          username: req.headers.username,
+        });
+      
+        console.log(user.purchasedCourses);
+        const courses = await CourseModel.find({
+          _id: {
+            $in: user.purchasedCourses,
+          },
+        });
+      
+        res.json({
+          courses,
+        });
+      });
+
+*/
