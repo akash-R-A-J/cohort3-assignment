@@ -1,0 +1,13 @@
+<html>
+  <body>
+    <button id="btn" onclick="increaseCount()">Count 0</button>
+  </body>
+  <script>
+    function increaseCount() {
+      const text = document.getElementById("btn").innerHTML;
+      const count = text.split(" ")[1];
+      const newVal = parseInt(count) + 1;
+      document.getElementById("btn").innerHTML = "Count " + newVal;
+    }
+  </script>
+</html>

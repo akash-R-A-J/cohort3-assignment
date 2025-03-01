@@ -1,0 +1,39 @@
+<html>
+  <body>
+    <div id="buttonParent"></div>
+    <script>
+      // state
+      let state = {
+        count: 0,
+        color: "red",
+      };
+
+      //   defining button component-1
+      function onButtonPress() {
+        state.count++;
+        state.color = "red";
+        buttonComponentRender(); // triggering re-render
+      }
+
+      //   this function is the function of the react
+      //   i.e. the react library functionality
+      function buttonComponentRender() {
+        document.getElementById("buttonParent").innerHTML = "";
+        const component = buttonComponent(state.count, state.color);
+        document.getElementById("buttonParent").appendChild(component);
+      }
+
+      //   this is a component
+      //   defining button component-2
+      function buttonComponent(count, color) {
+        const button = document.createElement("button");
+        button.innerHTML = `Counter ${count}`;
+        button.setAttribute("onclick", `onButtonPress()`);
+        button.setAttribute("style", `color: ` + color);
+        return button; // return DOM elements
+      }
+
+      buttonComponentRender();
+    </script>
+  </body>
+</html>
