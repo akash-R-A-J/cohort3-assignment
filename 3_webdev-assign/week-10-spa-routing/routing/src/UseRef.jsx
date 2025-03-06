@@ -9,8 +9,10 @@ import { useState, useEffect, useRef } from "react";
 
 function UseRef() {
   return (
-    //   <Input />
-    <Clock />
+    <>
+      <Input />
+      <Clock />
+    </>
   );
 }
 
