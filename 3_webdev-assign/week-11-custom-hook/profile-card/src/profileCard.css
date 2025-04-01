@@ -1,0 +1,56 @@
+.card-style {
+  width: 300px;
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 10px;
+  font-family: Arial, sans-serif;
+  box-shadow: 0px 0px 20px rgba(0,0,0,0.2);
+}
+
+.image-style {
+  width: 80px;
+  height: 80px;
+  border: 3px solid #ddd;
+  border-radius: 50%;
+}
+
+.name-style {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 10px 0 5px 0;
+}
+
+.job-style {
+  color: #555;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.description-style {
+  font-size: 12px;
+  color: #444;
+  margin: 10px 0;
+}
+
+.address-style {
+  font-size: 12px;
+  color: #888;
+}
+
+.button-style {
+  padding: 8px 15px;
+  margin: 5px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.connect-button {
+  background-color: #0077B5;
+  color: #fff;
+}
+
+.message-button {
+  background-color: #ddd;
+  color: #333;
+}
