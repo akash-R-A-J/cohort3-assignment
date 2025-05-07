@@ -1,5 +1,5 @@
-import { Button } from "./components/Buttons";
-import { Input } from "./components/Input";
+import { Button } from "../components/Buttons";
+import { Input } from "../components/Input";
 
 /*
     Color used

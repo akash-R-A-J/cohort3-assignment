@@ -1,5 +1,5 @@
 // OTP form
-import { Otp, OtpOptmized } from "./components/Otp";
+import { Otp, OtpOptmized } from "../components/Otp";
 
 /*
     Color used
