@@ -1,3 +1,13 @@
+/*
+    1. BASIC TYPES
+    2. BASIC FUNCTIONS
+    3. ASSIGNMENTS
+    4. INTERFACE
+    5. TYPES (union and intersection)
+*/
+
+/*---------------------------------------------------------------------------------------------*/
+
 // 1. TYPES: number, string, boolean, null, undefined, any
 
 // defining variables in ts:
@@ -18,7 +28,7 @@ function greetUser(name: string) {
 
 greetUser("Motu");
 
-// 2. write a function that calculate and returns the sum of two functions?
+// 2. write a function that calculate and returns the sum of two number?
 // things to learn -> how to assign a return type to a function
 function sum(a: number, b: number): number {
   return a + b;
