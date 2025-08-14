@@ -61,27 +61,47 @@ app.post("/api/v1/signup", async (req: Request, res: Response) => {
 
 // signin endpoint
 app.post("/api/v1/signin", async (req: Request, res: Response) => {
-  const username = req.body.username;
-  const password = req.body.password;
+  // zod validation
+  const parsedBody = userSchema.safeParse(req.body);
+  if (!parsedBody.success) {
+    return res.status(400).json({
+      errors: parsedBody.error.issues.map((err) => ({
+        path: err.path.join("."),
+        message: err.message,
+      })),
+    });
+  }
 
-  const existingUser = await UserModel.findOne({
-    username,
-    password,
-  });
+  // username and password check
+  const { username, password } = parsedBody.data;
 
-  if (existingUser) {
+  try {
+    const existingUser = await UserModel.findOne({ username: username.toLowerCase() });
+    if (!existingUser) {
+      return res.status(401).json({ message: "Invalid username or password." });
+    }
+
+    const matchedPassword = await bcrypt.compare(
+      password,
+      existingUser.password
+    );
+    if (!matchedPassword) {
+      return res.status(401).json({ message: "Invalid username or password." });
+    }
+
+    // token creation
     const token = jwt.sign(
       {
         id: existingUser._id,
       },
-      JWT_SECRET_KEY as string
+      JWT_SECRET_KEY as string,
+      { expiresIn: "1h" }
     );
 
     res.status(200).json({ token });
-  } else {
-    res.status(403).json({
-      message: "Incorrect credentials",
-    });
+  } catch (error) {
+    console.error("Signin error", error);
+    res.status(500).json({ message: "Server error.", error });
   }
 });
 
