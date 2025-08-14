@@ -2,17 +2,92 @@ import express from "express";
 import type { Request, Response } from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import jwt from "jsonwebtoken";
+import bcrypt, { hash } from "bcrypt";
+import { UserModel } from "./models.js";
+import { userSchema } from "./middleware.js";
 
 dotenv.config();
 
 const app = express();
 app.use(express.json());
 
-app.post("/api/v1/signup", (req: Request, res: Response) => {
-    
+// jwt secret key from env
+const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
+if (!process.env.JWT_SECRET_KEY) {
+  throw new Error("JWT_SECRET_KEY is not set in environment variables");
+}
+
+// signup endpoint
+app.post("/api/v1/signup", async (req: Request, res: Response) => {
+  // zod validation
+  const parsedBody = userSchema.safeParse(req.body);
+  if (!parsedBody.success) {
+    return res.status(400).json({
+      errors: parsedBody.error.issues.map((err) => ({
+        path: err.path.join("."),
+        message: err.message,
+      })),
+    });
+  }
+
+  // password hashing
+  const { username, password } = parsedBody.data;
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  // try-catch
+  try {
+    // check if user already exist or not, send status code 409 if exist already
+    const existingUser = await UserModel.findOne({
+      username: username.toLowerCase(),
+    });
+    if (existingUser) {
+      return res
+        .status(409)
+        .json({ message: "User already exists, try signing in." });
+    }
+
+    await UserModel.create({
+      username: username.toLowerCase(),
+      password: hashedPassword,
+    });
+
+    res.status(201).json({ message: "User signed up successfully." });
+  } catch (error) {
+    console.error("Signup error:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
 });
 
-app.post("/api/v1/signin", (req: Request, res: Response) => {});
+// signin endpoint
+app.post("/api/v1/signin", async (req: Request, res: Response) => {
+  const username = req.body.username;
+  const password = req.body.password;
+
+  const existingUser = await UserModel.findOne({
+    username,
+    password,
+  });
+
+  if (existingUser) {
+    const token = jwt.sign(
+      {
+        id: existingUser._id,
+      },
+      JWT_SECRET_KEY as string
+    );
+
+    res.status(200).json({ token });
+  } else {
+    res.status(403).json({
+      message: "Incorrect credentials",
+    });
+  }
+});
+
+// TODO: Write other models, schema and implement the endpoints
+
+// how to override the types of the express request object?
 
 app.post("/api/v1/content", (req: Request, res: Response) => {});
 
@@ -25,6 +100,7 @@ app.post("/api/v1/brain/share", (req: Request, res: Response) => {});
 app.get("/api/v1/brain/:shareLink", (req: Request, res: Response) => {});
 // req.params.shareLink
 
+// checking if MONGO_URL exist or not
 const MONGO_URL = process.env.MONGO_URL;
 if (!MONGO_URL) {
   throw new Error("MONGO_URL is not defined in environment variables.");
