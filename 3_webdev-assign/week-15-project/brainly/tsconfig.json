@@ -10,6 +10,7 @@
     "module": "nodenext",
     "target": "esnext",
     "types": [],
+    "typeRoots": ["./node_modules/@types", "./types"],
     // For nodejs:
     // "lib": ["esnext"],
     // "types": ["node"],
@@ -41,5 +42,7 @@
     "moduleDetection": "force",
     "skipLibCheck": true,
     "esModuleInterop": true // makes import express from "express"-style imports easier.
-  }
+  },
+
+  "include": ["src", "types"]
 }

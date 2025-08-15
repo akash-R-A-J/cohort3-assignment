@@ -3,9 +3,11 @@ import type { Request, Response } from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
-import bcrypt, { hash } from "bcrypt";
-import { UserModel } from "./models.js";
-import { userSchema } from "./middleware.js";
+import bcrypt from "bcrypt";
+import { ContentModel, TagModel, UserModel } from "./models.js";
+import { contentSchema, userAuth, userSchema } from "./middleware.js";
+import { Types } from "mongoose";
+// import type { AuthenticatedRequest } from "./utils.js";
 
 dotenv.config();
 
@@ -17,6 +19,11 @@ const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 if (!process.env.JWT_SECRET_KEY) {
   throw new Error("JWT_SECRET_KEY is not set in environment variables");
 }
+
+// just for checking/debugging
+console.log(process.env.MONGO_URL);
+console.log(process.env.PORT);
+console.log(process.env.JWT_SECRET_KEY);
 
 // signup endpoint
 app.post("/api/v1/signup", async (req: Request, res: Response) => {
@@ -66,7 +73,7 @@ app.post("/api/v1/signin", async (req: Request, res: Response) => {
   if (!parsedBody.success) {
     return res.status(400).json({
       errors: parsedBody.error.issues.map((err) => ({
-        path: err.path.join("."),
+        error: err.path.join("."),
         message: err.message,
       })),
     });
@@ -76,7 +83,9 @@ app.post("/api/v1/signin", async (req: Request, res: Response) => {
   const { username, password } = parsedBody.data;
 
   try {
-    const existingUser = await UserModel.findOne({ username: username.toLowerCase() });
+    const existingUser = await UserModel.findOne({
+      username: username.toLowerCase(),
+    });
     if (!existingUser) {
       return res.status(401).json({ message: "Invalid username or password." });
     }
@@ -109,7 +118,50 @@ app.post("/api/v1/signin", async (req: Request, res: Response) => {
 
 // how to override the types of the express request object?
 
-app.post("/api/v1/content", (req: Request, res: Response) => {});
+app.post("/api/v1/content", userAuth, async (req: Request, res: Response) => {
+  // input validation: link, type, title and tags
+  const parsedBody = contentSchema.safeParse(req.body);
+  if (!parsedBody.success) {
+    return res.status(400).json({
+      errors: parsedBody.error.issues.map((err) => ({
+        error: err.path.join("."),
+        message: err.message,
+      })),
+    });
+  }
+
+  const { type, link, title, tags } = parsedBody.data;
+
+  // check if tags already exist or not? if exist, create an array with the respective tag objectId
+  let tagsObject: Types.ObjectId[] = [];
+  if (tags) {
+    tagsObject = await Promise.all(
+      tags.map(async (tag) => {
+        let t = await TagModel.findOne({ title: tag });
+
+        // create tag if it doesn't exist
+        if (!t) {
+          t = await TagModel.create({
+            title: tag,
+          });
+        }
+
+        return t._id;
+      })
+    );
+  }
+
+  // save the content (we can also add here a check if the content already exist or not?)
+  await ContentModel.create({
+    link,
+    type,
+    title,
+    tags: tagsObject,
+    userId: req.userId,
+  });
+
+  res.status(201).json({ message: "Content saved successfully" });
+});
 
 app.get("/api/v1/content", (req: Request, res: Response) => {});
 

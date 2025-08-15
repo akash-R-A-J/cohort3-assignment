@@ -8,7 +8,7 @@ interface IUser {
 
 interface IContent {
   link: string;
-  types: string;
+  type: string;
   title: string;
   tags: Types.ObjectId[];
   userId: Types.ObjectId;
@@ -31,7 +31,7 @@ const UserSchema = new Schema<IUser>({
 
 const ContentSchema = new Schema<IContent>({
   link: { type: String, required: true },
-  types: { type: String, required: true },
+  type: { type: String, required: true },
   title: { type: String, required: true },
   tags: [{ type: Schema.Types.ObjectId, ref: "Tag" }],
   userId: { type: Schema.Types.ObjectId, ref: "User" },
