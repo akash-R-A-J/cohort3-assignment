@@ -118,6 +118,7 @@ app.post("/api/v1/signin", async (req: Request, res: Response) => {
 
 // how to override the types of the express request object?
 
+// endpoint to add content
 app.post("/api/v1/content", userAuth, async (req: Request, res: Response) => {
   // input validation: link, type, title and tags
   const parsedBody = contentSchema.safeParse(req.body);
@@ -163,7 +164,24 @@ app.post("/api/v1/content", userAuth, async (req: Request, res: Response) => {
   res.status(201).json({ message: "Content saved successfully" });
 });
 
-app.get("/api/v1/content", (req: Request, res: Response) => {});
+app.get("/api/v1/content", userAuth, async (req: Request, res: Response) => {
+  try {
+    const contents = await ContentModel.find({
+      userId: req.userId,
+    });
+
+    if (!contents.length) {
+      return res
+        .status(200)
+        .json({ contents: [], message: "No content found, try adding some." });
+    }
+
+    res.status(200).json({ contents });
+  } catch (error) {
+    console.error("Error fetching content", error);
+    res.status(500).json({ message: "Server error." });
+  }
+});
 
 app.delete("/api/v1/content", (req: Request, res: Response) => {});
 
