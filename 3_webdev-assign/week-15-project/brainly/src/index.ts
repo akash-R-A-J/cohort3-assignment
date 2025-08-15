@@ -183,7 +183,28 @@ app.get("/api/v1/content", userAuth, async (req: Request, res: Response) => {
   }
 });
 
-app.delete("/api/v1/content", (req: Request, res: Response) => {});
+app.delete("/api/v1/content", userAuth, async (req: Request, res: Response) => {
+  // TODO: we can also add input validation here for the contentId
+  try {
+    const content = await ContentModel.findOne({
+      _id: req.body.contentId,
+      userId: req.userId, // delete if user owns the content
+    });
+
+    if (!content) {
+      return res
+        .status(404)
+        .json({ message: "Content not found or not owned by user." });
+    }
+
+    await ContentModel.deleteOne({ _id: content._id });
+
+    res.status(200).json({ message: "Content deleted successfully." });
+  } catch (error) {
+    console.error("Error deleting content", error);
+    res.status(500).json({ message: "Server error." });
+  }
+});
 
 app.post("/api/v1/brain/share", (req: Request, res: Response) => {});
 
