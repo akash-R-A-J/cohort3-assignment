@@ -1,3 +1,4 @@
+import "express";
 import express from "express";
 import type { Request, Response } from "express";
 import mongoose from "mongoose";
@@ -7,12 +8,13 @@ import bcrypt from "bcrypt";
 import { ContentModel, TagModel, UserModel } from "./models.js";
 import { contentSchema, userAuth, userSchema } from "./middleware.js";
 import { Types } from "mongoose";
-// import type { AuthenticatedRequest } from "./utils.js";
 
 dotenv.config();
 
 const app = express();
 app.use(express.json());
+
+// how to override the types of the express request object?
 
 // jwt secret key from env
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
@@ -20,12 +22,7 @@ if (!process.env.JWT_SECRET_KEY) {
   throw new Error("JWT_SECRET_KEY is not set in environment variables");
 }
 
-// just for checking/debugging
-console.log(process.env.MONGO_URL);
-console.log(process.env.PORT);
-console.log(process.env.JWT_SECRET_KEY);
-
-// signup endpoint
+// signup endpoint (tested)
 app.post("/api/v1/signup", async (req: Request, res: Response) => {
   // zod validation
   const parsedBody = userSchema.safeParse(req.body);
@@ -66,7 +63,7 @@ app.post("/api/v1/signup", async (req: Request, res: Response) => {
   }
 });
 
-// signin endpoint
+// signin endpoint (tested)
 app.post("/api/v1/signin", async (req: Request, res: Response) => {
   // zod validation
   const parsedBody = userSchema.safeParse(req.body);
@@ -90,6 +87,8 @@ app.post("/api/v1/signin", async (req: Request, res: Response) => {
       return res.status(401).json({ message: "Invalid username or password." });
     }
 
+    console.log(existingUser);
+    console.log(password + " : " + existingUser.password);
     const matchedPassword = await bcrypt.compare(
       password,
       existingUser.password
@@ -114,13 +113,10 @@ app.post("/api/v1/signin", async (req: Request, res: Response) => {
   }
 });
 
-// TODO: Write other models, schema and implement the endpoints
-
-// how to override the types of the express request object?
-
-// endpoint to add content
+// endpoint to add content (tested: tags should be an array, and url/link should be a proper link)
 app.post("/api/v1/content", userAuth, async (req: Request, res: Response) => {
   // input validation: link, type, title and tags
+  console.log(req.userId);
   const parsedBody = contentSchema.safeParse(req.body);
   if (!parsedBody.success) {
     return res.status(400).json({
@@ -164,6 +160,7 @@ app.post("/api/v1/content", userAuth, async (req: Request, res: Response) => {
   res.status(201).json({ message: "Content saved successfully" });
 });
 
+// endpoint to get the contents
 app.get("/api/v1/content", userAuth, async (req: Request, res: Response) => {
   try {
     const contents = await ContentModel.find({
@@ -183,6 +180,7 @@ app.get("/api/v1/content", userAuth, async (req: Request, res: Response) => {
   }
 });
 
+// endpoint to delete a content
 app.delete("/api/v1/content", userAuth, async (req: Request, res: Response) => {
   // TODO: we can also add input validation here for the contentId
   try {
@@ -197,6 +195,7 @@ app.delete("/api/v1/content", userAuth, async (req: Request, res: Response) => {
         .json({ message: "Content not found or not owned by user." });
     }
 
+    // while deleting the content, we can also delete the respective tags, if those tags are not used by any other contents
     await ContentModel.deleteOne({ _id: content._id });
 
     res.status(200).json({ message: "Content deleted successfully." });

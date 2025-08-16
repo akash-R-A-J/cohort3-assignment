@@ -2,12 +2,12 @@ import { z } from "zod";
 import dotenv from "dotenv";
 import jwt, { type JwtPayload } from "jsonwebtoken";
 import type { Request, Response, NextFunction } from "express";
-// import type { AuthenticatedRequest } from "./utils.js";
 
 dotenv.config();
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY as string;
 
 // INPUT VALIDATION
+
 // 1. USER
 // input validation for signup and signin (username and password)
 const passwordSchema = z
@@ -62,17 +62,16 @@ export const contentSchema = z.object({
 
 // middleware for authentication
 export const userAuth = (req: Request, res: Response, next: NextFunction) => {
-  // .check if token is present or not?
-  // expects token as something like this: [token: "bearer token_value"]
+  // check if token is present or not? [token: "Bearer token_value"]
   const token = req.headers.authorization?.split(" ")[1];
   if (!token) {
-    return res.status(403).json({ message: "Invalid token." });
+    return res.status(403).json({ message: "Authorization token missing." });
   }
 
   try {
     // verify the token
     const decoded = jwt.verify(token, JWT_SECRET_KEY) as JwtPayload;
-    if (!decoded.id) {
+    if (!decoded || !decoded.id) {
       return res.status(403).json({ message: "Invalid token payload." });
     }
 

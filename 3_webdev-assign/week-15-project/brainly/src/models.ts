@@ -26,7 +26,7 @@ interface ILink {
 // schemas
 const UserSchema = new Schema<IUser>({
   username: { type: String, required: true, unique: true },
-  password: { type: String, required: true, select: false },
+  password: { type: String, required: true },
 });
 
 const ContentSchema = new Schema<IContent>({
