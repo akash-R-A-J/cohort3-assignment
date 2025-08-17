@@ -1,10 +1,51 @@
 // this interface means what input the button will accept
-export interface ButtonProps {
-  variant: "primary" | "secondary";
-  size: "sm" | "md" | "lg";
+interface ButtonProps {
+  variant: "primary" | "secondary"; // map can be used for more options
+  size: "sm" | "md" | "lg"; // including text size
   text: string;
-  startIcon: any; // should be ReactElement (it can be other react element)
-  endIcon: any; // should be ReactElement (it can be other react element)
+  textColor?: string; // should be optional and white by default
+  startIcon?: React.ReactNode; // can be ReactElement or string, covers both
+  endIcon?: React.ReactNode; // can be ReactElement or string, covers both
+  className?: string;
+  onClick: () => void;
 }
 
-export const Button = () => {};
+// used for type safety and consistency
+const sizeClasses: Record<ButtonProps["size"], string> = {
+  sm: "text-sm px-2 py-1",
+  md: "text-base px-4 py-2", // md not supported, so it should be base
+  lg: "text-lg px-6 py-3",
+};
+
+const variantStyles: Record<ButtonProps["variant"], string> = {
+  primary: "bg-blue-700 hover:bg-blue-800",
+  secondary: "bg-blue-400 hover:bg-blue-500",
+};
+
+const defaultStyles = "rounded-md m-5";
+
+// generic button component
+export const Button = (props: ButtonProps) => {
+  return (
+    <button
+      className={`
+        ${variantStyles[props.variant]}
+        ${sizeClasses[props.size]}
+        ${defaultStyles}
+        ${props.textColor ?? "text-white"}
+        ${props.className ?? "flex mx-auto items-center"}`} // this shouldn't be here, we are building generic button
+      onClick={props.onClick}
+    >
+      {/* how to pass size to the icon component from here (below) we only have to pass 
+          the size only once while rendering this component somthing like this: */}
+      {/* <span><Component component={props.startIcon} size={props.size}></Component></span> */}
+
+      {/* 
+        const Comp = props.startIcon | "button"; // button is working but porps.startIcon isn't, why?
+      */}
+      {props.startIcon && <span className="mr-2">{props.startIcon}</span>}
+      {props.text}
+      {props.endIcon && <span className="ml-2">{props.endIcon}</span>}
+    </button>
+  );
+};
