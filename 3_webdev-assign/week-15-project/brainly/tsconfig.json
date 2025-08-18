@@ -28,7 +28,9 @@
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "skipLibCheck": true,
-    "esModuleInterop": true // makes `import express from "express"` style imports easier.
+    "esModuleInterop": true, // makes `import express from "express"` style imports easier.
+    "allowImportingTsExtensions": true, // to enable this we have to either enable noEmit or emitDeclarationOnly
+    "emitDeclarationOnly": true // why????
   },
 
   "include": ["src", "types"]

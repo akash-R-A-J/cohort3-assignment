@@ -43,7 +43,7 @@ const TagSchema = new Schema<ITag>({
 
 const LinkSchema = new Schema<ILink>({
   hash: { type: String, required: true },
-  userId: { type: Schema.Types.ObjectId, required: true, ref: "User" },
+  userId: { type: Schema.Types.ObjectId, required: true, ref: "User", unique: true },
 });
 
 // models

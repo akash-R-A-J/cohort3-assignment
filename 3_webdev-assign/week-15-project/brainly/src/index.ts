@@ -5,16 +5,19 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import { ContentModel, TagModel, UserModel } from "./models.js";
+import { ContentModel, LinkModel, TagModel, UserModel } from "./models.js";
 import { contentSchema, userAuth, userSchema } from "./middleware.js";
 import { Types } from "mongoose";
+import { randomHash } from "./utils.ts";
 
 dotenv.config();
 
 const app = express();
 app.use(express.json());
 
+// LEARN
 // how to override the types of the express request object?
+// type augmentation with Express Request
 
 // jwt secret key from env
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
@@ -205,10 +208,82 @@ app.delete("/api/v1/content", userAuth, async (req: Request, res: Response) => {
   }
 });
 
-app.post("/api/v1/brain/share", (req: Request, res: Response) => {});
+// *****NEED TO TEST THE BELOW 2 ENDPOINTS*****
+// update the share link (create or delete)
+app.post(
+  "/api/v1/brain/share",
+  userAuth,
+  async (req: Request, res: Response) => {
+    const { share } = req.body; // true -> create, false -> delete
+    try {
+      const exist = await LinkModel.findOne({ userId: req.userId });
 
-app.get("/api/v1/brain/:shareLink", (req: Request, res: Response) => {});
-// req.params.shareLink
+      if (share) {
+        // CREATE LINK
+        if (exist) {
+          return res.status(409).json({
+            message: "You already have sharable link.",
+            hash: exist.hash,
+          });
+        }
+
+        const hash = randomHash(10);
+        await LinkModel.create({
+          userId: req.userId,
+          hash, // this will return a random string of length 10
+        });
+
+        return res
+          .status(201)
+          .json({ message: "Sharable link created successfully.", hash });
+      } else {
+        // DELETE LINK
+        if (!exist) {
+          return res
+            .status(404)
+            .json({ message: "You don't have any link to delete." });
+        }
+
+        await LinkModel.deleteOne({ userId: req.userId });
+        res.status(201).json({ message: "Share link deleted successfully." });
+      }
+    } catch (error) {
+      console.error(
+        `error ${share ? "creating" : "deleting"} share link`,
+        error
+      );
+      res.status(500).json({ message: "Internal server error." });
+    }
+  }
+);
+
+// endpoint to fetch shared contents using a unique share link
+app.get("/api/v1/brain/:shareLink", async (req: Request, res: Response) => {
+  const hash = req.params.shareLink;
+
+  try {
+    const link = await LinkModel.findOne({ hash });
+    if (!link) {
+      return res.status(404).json({ message: "Link expired.", contents: [] });
+    }
+
+    const contents = await ContentModel.find({ userId: link.userId }).select(
+      "-userId"
+    );
+    if (!contents) {
+      return res
+        .status(404)
+        .json({ message: "User doesn't have any contents.", contents: [] });
+    }
+
+    res
+      .status(200)
+      .json({ message: "Here are the shared contents.", contents });
+  } catch (error) {
+    console.error("error getting contents for other users", error);
+    res.status(500).json({ message: "Internal server error." });
+  }
+});
 
 // checking if MONGO_URL exist or not
 const MONGO_URL = process.env.MONGO_URL;
