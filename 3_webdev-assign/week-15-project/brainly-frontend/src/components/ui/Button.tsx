@@ -22,7 +22,7 @@ const variantStyles: Record<ButtonProps["variant"], string> = {
   secondary: "bg-blue-400 hover:bg-blue-500",
 };
 
-const defaultStyles = "rounded-md m-5";
+const defaultStyles = "rounded-md m-5 font-light";
 
 // generic button component
 export const Button = (props: ButtonProps) => {
@@ -39,10 +39,8 @@ export const Button = (props: ButtonProps) => {
       {/* how to pass size to the icon component from here (below) we only have to pass 
           the size only once while rendering this component somthing like this: */}
       {/* <span><Component component={props.startIcon} size={props.size}></Component></span> */}
-
-      {/* 
-        const Comp = props.startIcon | "button"; // button is working but porps.startIcon isn't, why?
-      */}
+      {/* const Comp = props.startIcon | "button"; // button is working but porps.startIcon isn't, why? */}
+      
       {props.startIcon && <span className="mr-2">{props.startIcon}</span>}
       {props.text}
       {props.endIcon && <span className="ml-2">{props.endIcon}</span>}
