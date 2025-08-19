@@ -22,7 +22,8 @@ const variantStyles: Record<ButtonProps["variant"], string> = {
   secondary: "bg-blue-400 hover:bg-blue-500",
 };
 
-const defaultStyles = "rounded-md m-5 font-light";
+const defaultStyles =
+  "flex rounded-md m-4 font-light justify-center items-center";
 
 // generic button component
 export const Button = (props: ButtonProps) => {
@@ -33,14 +34,14 @@ export const Button = (props: ButtonProps) => {
         ${sizeClasses[props.size]}
         ${defaultStyles}
         ${props.textColor ?? "text-white"}
-        ${props.className ?? "flex mx-auto items-center"}`} // this shouldn't be here, we are building generic button
+        ${props.className ?? ""}`} // this shouldn't be here, we are building generic button
       onClick={props.onClick}
     >
       {/* how to pass size to the icon component from here (below) we only have to pass 
           the size only once while rendering this component somthing like this: */}
       {/* <span><Component component={props.startIcon} size={props.size}></Component></span> */}
       {/* const Comp = props.startIcon | "button"; // button is working but porps.startIcon isn't, why? */}
-      
+
       {props.startIcon && <span className="mr-2">{props.startIcon}</span>}
       {props.text}
       {props.endIcon && <span className="ml-2">{props.endIcon}</span>}
