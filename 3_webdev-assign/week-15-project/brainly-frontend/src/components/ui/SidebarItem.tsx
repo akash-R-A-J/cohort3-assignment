@@ -4,7 +4,7 @@ interface SidebarItemProps {
   onClick?: () => void;
 }
 
-const defaultStyles = "rounded-md p-2 m-1 flex mx-auto items-center";
+const defaultStyles = "pl-4 py-1 flex mx-auto items-center font-medium cursor-pointer hover:bg-gray-300 hover:rounded-md";
 
 export const SiderbarItem = (props: SidebarItemProps) => {
   return (

@@ -7,7 +7,7 @@ interface CardProps {
 }
 
 const defaultStyles =
-  "p-8 bg-white rounded-md border-gray-200 min-w-96 max-w-96 border mb-5";
+  "p-8 bg-white rounded-md border-gray-200 min-w-72 max-w-96 min-h-72 border mb-5";
 
 export const Card = ({ title, link, type }: CardProps) => {
   return (
@@ -27,13 +27,14 @@ export const Card = ({ title, link, type }: CardProps) => {
           <a className="pr-2 text-gray-500" href={link} target="_blank">
             <ShareIcon size="md" />
           </a>
-          <div className="pr-2 text-gray-500">
+          <div className="pr-2 text-red-500">
             <ShareIcon size="md" />
           </div>
         </div>
       </div>
 
       {/* card content */}
+      {/* ideally we should store the id from the given link and then use that id here for the rendering */}
       <div className="pt-4">
         {type === "youtube" && (
           <iframe
