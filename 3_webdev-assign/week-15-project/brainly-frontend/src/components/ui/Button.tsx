@@ -3,10 +3,12 @@ interface ButtonProps {
   variant: "primary" | "secondary"; // map can be used for more options
   size: "sm" | "md" | "lg"; // including text size
   text: string;
+  fullWidth?: boolean;
   textColor?: string; // should be optional and white by default
   startIcon?: React.ReactNode; // can be ReactElement or string, covers both
   endIcon?: React.ReactNode; // can be ReactElement or string, covers both
   className?: string;
+  loading?: boolean;
   onClick: () => void;
 }
 
@@ -23,7 +25,7 @@ const variantStyles: Record<ButtonProps["variant"], string> = {
 };
 
 const defaultStyles =
-  "flex rounded-md m-4 font-light justify-center items-center";
+  "flex rounded-md m-2 font-light justify-center items-center";
 
 // generic button component
 export const Button = (props: ButtonProps) => {
@@ -33,9 +35,12 @@ export const Button = (props: ButtonProps) => {
         ${variantStyles[props.variant]}
         ${sizeClasses[props.size]}
         ${defaultStyles}
+        ${props.fullWidth && "w-full"}
+        ${props.loading && "opacity-40 bg-blue-800"}
         ${props.textColor ?? "text-white"}
         ${props.className ?? ""}`} // this shouldn't be here, we are building generic button
       onClick={props.onClick}
+      disabled={props.loading}
     >
       {/* how to pass size to the icon component from here (below) we only have to pass 
           the size only once while rendering this component somthing like this: */}
