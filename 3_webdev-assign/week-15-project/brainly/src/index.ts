@@ -8,11 +8,21 @@ import bcrypt from "bcrypt";
 import { ContentModel, LinkModel, TagModel, UserModel } from "./models.js";
 import { contentSchema, userAuth, userSchema } from "./middleware.js";
 import { Types } from "mongoose";
-import { randomHash } from "./utils.ts";
+import { randomHash } from "./utils.js";
+import cors from "cors";
 
 dotenv.config();
 
 const app = express();
+app.use(
+  cors({
+    origin: "http://localhost:5173", // your frontend dev URL
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"], // <- important
+    credentials: true, // optional, only if you plan to send cookies/tokens
+  })
+);
+
 app.use(express.json());
 
 // LEARN
@@ -24,6 +34,8 @@ const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 if (!process.env.JWT_SECRET_KEY) {
   throw new Error("JWT_SECRET_KEY is not set in environment variables");
 }
+
+// Add some log in every endpoint for debugging
 
 // signup endpoint (tested)
 app.post("/api/v1/signup", async (req: Request, res: Response) => {
@@ -39,7 +51,7 @@ app.post("/api/v1/signup", async (req: Request, res: Response) => {
   }
 
   // password hashing
-  const { username, password } = parsedBody.data;
+  const { username, password } = req.body;
   const hashedPassword = await bcrypt.hash(password, 10);
 
   // try-catch
@@ -54,11 +66,13 @@ app.post("/api/v1/signup", async (req: Request, res: Response) => {
         .json({ message: "User already exists, try signing in." });
     }
 
+    // create user if it doesn't exist
     await UserModel.create({
       username: username.toLowerCase(),
       password: hashedPassword,
     });
 
+    // return the response with a message
     res.status(201).json({ message: "User signed up successfully." });
   } catch (error) {
     console.error("Signup error:", error);
@@ -90,8 +104,6 @@ app.post("/api/v1/signin", async (req: Request, res: Response) => {
       return res.status(401).json({ message: "Invalid username or password." });
     }
 
-    console.log(existingUser);
-    console.log(password + " : " + existingUser.password);
     const matchedPassword = await bcrypt.compare(
       password,
       existingUser.password
@@ -100,7 +112,7 @@ app.post("/api/v1/signin", async (req: Request, res: Response) => {
       return res.status(401).json({ message: "Invalid username or password." });
     }
 
-    // token creation
+    // token generation
     const token = jwt.sign(
       {
         id: existingUser._id,
@@ -109,6 +121,7 @@ app.post("/api/v1/signin", async (req: Request, res: Response) => {
       { expiresIn: "1h" }
     );
 
+    // return the token
     res.status(200).json({ token });
   } catch (error) {
     console.error("Signin error", error);
@@ -120,6 +133,7 @@ app.post("/api/v1/signin", async (req: Request, res: Response) => {
 app.post("/api/v1/content", userAuth, async (req: Request, res: Response) => {
   // input validation: link, type, title and tags
   console.log(req.userId);
+  console.log(req.body);
   const parsedBody = contentSchema.safeParse(req.body);
   if (!parsedBody.success) {
     return res.status(400).json({
@@ -131,6 +145,7 @@ app.post("/api/v1/content", userAuth, async (req: Request, res: Response) => {
   }
 
   const { type, link, title, tags } = parsedBody.data;
+  console.log(type, link, title, tags);
 
   // check if tags already exist or not? if exist, create an array with the respective tag objectId
   let tagsObject: Types.ObjectId[] = [];
@@ -150,6 +165,7 @@ app.post("/api/v1/content", userAuth, async (req: Request, res: Response) => {
       })
     );
   }
+  console.log(tagsObject);
 
   // save the content (we can also add here a check if the content already exist or not?)
   await ContentModel.create({
@@ -160,6 +176,7 @@ app.post("/api/v1/content", userAuth, async (req: Request, res: Response) => {
     userId: req.userId,
   });
 
+  console.log("content added successfully");
   res.status(201).json({ message: "Content saved successfully" });
 });
 
