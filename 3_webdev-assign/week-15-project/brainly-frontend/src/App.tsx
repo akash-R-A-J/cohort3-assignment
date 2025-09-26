@@ -3,6 +3,7 @@ import { Signin } from "./pages/Signin";
 import { Signup } from "./pages/Signup";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+// needs finishing it, at least add end-to-end working and some polishing in it
 function App() {
   return (
     <BrowserRouter>
@@ -11,7 +12,7 @@ function App() {
         <Route path="/signin" element={<Signin />} />
         <Route path="/dashboard" element={<Dashboard />} />
         {/* complete this share route, use another page instead of dashboard */}
-        <Route path="/share/:sharId" element={<Dashboard />} /> 
+        <Route path="/share/:sharId" element={<Dashboard />} />
       </Routes>
     </BrowserRouter>
   );
