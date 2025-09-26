@@ -10,7 +10,7 @@ const hash = crypto.createHash("sha256").update(input).digest("hex");
 console.log("ASSIGN-0");
 console.log(hash);
 
-// ASSIGN-1 (output a string whose hash will start with 00000)
+// ASSIGN-1 (output a string whose hash will start with 00000) [finding a nounce]
 function findHashWithPrefix(hashPrefix) {
   let val = 1; // input
 
