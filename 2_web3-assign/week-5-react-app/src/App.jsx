@@ -1,4 +1,3 @@
-import React, { FC, useMemo } from "react";
 import {
   ConnectionProvider,
   WalletProvider,
@@ -25,7 +24,8 @@ function App() {
     <div id="container">
       <ConnectionProvider
         endpoint={
-          "https://solana-devnet.g.alchemy.com/v2/kWmBAEH1C7Nbe5LWMf09iNWBWogbREw2"
+          // change to devnet if building
+          "https://solana-mainnet.g.alchemy.com/v2/kWmBAEH1C7Nbe5LWMf09iNWBWogbREw2"
         }
       >
         <WalletProvider wallets={[]} autoConnect>
